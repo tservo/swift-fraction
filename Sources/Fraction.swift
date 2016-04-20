@@ -11,9 +11,8 @@ public class Fraction {
 	/**
 	* init fraction from a single integer
 	*/
-	public init(_ i: Int) {
-		self.numer = i
-		self.denom = 1
+	public convenience init(_ i: Int) {
+		self.init(n: i, d: 1)
 	}
 
 	/**
@@ -23,13 +22,44 @@ public class Fraction {
 	public init(n: Int,d: Int) {
 		self.numer = n
 		self.denom = d
+
+		// get the params into correct form
+		reduce()
+	}
+
+	// helper methods
+	// greatest common divisor, used to reduce fractions to 
+	// lowest terms
+	private func gcd(numer:Int, denom:Int) -> (Int,Int) {
+		// lets get the greatest common
+		// denominator
+		var a = numer
+		var b = denom
+
+		//GCD(a,b) = GCD(b,a%b)
+		// stop when a%b hits zero, and return b
+		while b > 0 {
+			let remainder = a % b
+			a = b
+			b = remainder
+		}
+		return (numer: numer / a, denom: denom / a )
+	}
+
+	// reduce the fraction
+	private func reduce() {
+		(numer,denom) = gcd(numer: numer, denom:denom)
 	}
 
 	/**
 	 * convert Fraction to String
 	 * for printing
 	 */
-	func toString() -> String {
-		return "\(numer)"+"/"+"\(denom)"
+	public func toString() -> String {
+		if denom == 1 {
+			return "\(numer)"
+		} else {
+			return "\(numer)"+"/"+"\(denom)"
+		}
 	}
 }
